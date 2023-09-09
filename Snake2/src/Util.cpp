@@ -9,3 +9,4 @@ int getRandNumInt(){
 	uniform_int_distribution<int> distribution(0, 9);
 	return distribution(mersenne);
 }
+

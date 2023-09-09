@@ -124,3 +124,4 @@ void Food::collision(Alive *faced, Field *fill){
 }
 
 
+

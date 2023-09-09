@@ -5,3 +5,4 @@ enum direction{STOP, UP, RIGHT, DOWN, LEFT};
 direction inputDir ();
 
 #endif
+
