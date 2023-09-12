@@ -38,7 +38,7 @@ void SnakeHead::move(Field *fill){
 	if(ptrNextBodyPart){
 		neckX = ptrNextBodyPart->getX();
 		neckY = ptrNextBodyPart->getY();
-		ptrNextBodyPart->move(x, y, fill, this);
+		ptrNextBodyPart->SnakeBodyMove(x, y, fill, this);
 	}
 	direction tempDir = dir;
 	tempX = x;
@@ -97,7 +97,6 @@ bool SnakeHead::isNeck(Field *fill, int neckX, int neckY){
 }
 
 SnakeBody::SnakeBody(SnakeHead *ptrSnakeHead){
-	ptrNextBodyPart = nullptr;
 	x = ptrSnakeHead->getTailLastPositionX();
 	y = ptrSnakeHead->getTailLastPositionY();
 
@@ -117,11 +116,11 @@ void SnakeBody::collision(CellContent *faced, Field *fill){
 void SnakeBody::draw(){
 	cout << "%";
 }
-void SnakeBody::move(int x, int y, Field *fill, SnakeHead *snakeHead){
+void SnakeBody::SnakeBodyMove(int x, int y, Field *fill, SnakeHead *snakeHead){
 	fill->cellRemove(this->x, this->y);
 	fill->cellAdd(x, y, this);
 	if(ptrNextBodyPart){
-		ptrNextBodyPart->move(this->x, this->y, fill, snakeHead);
+		ptrNextBodyPart->SnakeBodyMove(this->x, this->y, fill, snakeHead);
 	}else{
 		snakeHead->setTailLastPositionXY(this->x, this->y);
 		snakeHead->setTail(this);

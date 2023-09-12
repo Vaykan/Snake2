@@ -1,16 +1,16 @@
-
 #ifndef SNAKE_H_
 #define SNAKE_H_
 
 #include "InputScanner.h"
+#include "CellAndCellContent.h"
+#include "Field.h"
 
-class Field;
 class CellContent;
 class SnakeBody;
 
 class SnakeHead : public CellContent{
 private:
-	SnakeBody *ptrNextBodyPart;
+	SnakeBody *ptrNextBodyPart = nullptr;
 	SnakeBody *ptrTail;
 	int x, y;
 	int tailLastPositionX, tailLastPositionY;
@@ -44,7 +44,7 @@ public:
 	void SnakeBodyMove(int x, int y, Field *fill, SnakeHead *snakeHead);
 	int getX();
 	int getY();
-	SnakeBody *ptrNextBodyPart;
+	SnakeBody *ptrNextBodyPart = nullptr;
 };
 
 

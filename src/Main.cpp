@@ -1,7 +1,8 @@
-#include "Field.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
+
+#include "Field.h"
 
 using namespace std;
 
@@ -16,4 +17,3 @@ int main() {
 	system("pause");
 	return 0;
 }
-cout << "f";

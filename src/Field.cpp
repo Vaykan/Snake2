@@ -1,7 +1,10 @@
 #include <iostream>
 #include <typeinfo>
+
 #include "Field.h"
-#include "Util.h"
+
+#include "SpawnController.h"
+#include "CellAndCellContent.h"
 
 using namespace std;
 Field::Field(){
@@ -11,7 +14,6 @@ Field::Field(){
 		}
 	}
 	startFullField();
-	gameOver = false;
 }
 
 void Field::startFullField(){
@@ -21,21 +23,16 @@ void Field::startFullField(){
 			}
 		}
 	for(int x = 0; x < 10; x++){
-		cell[x][0]->cont = new Wall;
-		cell[x][9]->cont = new Wall;
+		SpawnController::getSpawnController().spawnWall(x, 0, this);
+		SpawnController::getSpawnController().spawnWall(x, 9, this);
 		}
 	for(int y = 1; y < 9; y++){
-		cell[0][y]->cont = new Wall;
-		cell[9][y]->cont = new Wall;
+		SpawnController::getSpawnController().spawnWall(0, y, this);
+		SpawnController::getSpawnController().spawnWall(9, y, this);
 	}
-	cell[4][4]->cont = new SnakeHead(4, 4, this);
-	int x, y;
-	while(true){
-		x = getRandNumInt();
-		y = getRandNumInt();
-		if(!cell[x][y]->cont)
-			cell[x][y]->cont = new Food;
-	}
+//	cell[4][4]->cont = new SnakeHead(4, 4, this);
+	SpawnController::getSpawnController().spawnSnakeHead(4, 4, this);
+	SpawnController::getSpawnController().spawnRandomFood(this);
 }
 
 void Field::step(){
@@ -64,9 +61,9 @@ void Field::UIDraw(){
 	}
 }
 
-void Field::spawnBody(int x, int y, CellContent *SnakeHead){
-	cell[x][y]->cont = new SnakeBody(SnakeHead);
-}
+//void Field::spawnBody(int x, int y, CellContent *SnakeHead){
+//	cell[x][y]->cont = new SnakeBody(SnakeHead);
+//}
 
 void Field::setGameOver(){
 	gameOver = true;
@@ -80,7 +77,7 @@ void Field::cellAdd(int x, int y, CellContent *Content){
 	this->cell[x][y]->cont = Content;
 }
 
-void Field::cellMove(int x, int y, Alive *Moving){
+void Field::cellMove(int x, int y, CellContent *Moving){
 	if(this->cell[x][y]->cont)
 		this->cellCheckCollision(x, y, Moving);
 	this->cellAdd(x, y, Moving);
@@ -90,37 +87,9 @@ CellContent *Field::cellGetContent(int x, int y){
 	return this->cell[x][y]->cont;
 }
 
-void Field::cellCheckCollision(int x, int y, Alive *Checker){
+void Field::cellCheckCollision(int x, int y, CellContent *Checker){
 	this->cell[x][y]->cont->collision(Checker, this);
 }
 
-
-
-CellContent::~CellContent() {}
-void CellContent::draw(){}
-void CellContent::collision(Alive *faced, Field *fill){}
-
-void Wall::draw(){
-	cout << "#";
-}
-
-void Wall::collision(Alive *faced, Field *fill){
-	if(typeid(*faced) == typeid(SnakeHead)){
-		fill->setGameOver();
-	}
-}
-
-
-
-void Food::draw(){
-	cout << "+";
-}
-void Food::collision(Alive *faced, Field *fill){
-	if(typeid(*faced) == typeid(SnakeHead)){
-		fill->spawnBody(fill->getPtrSnakeHead()->getTailLastPositionX(), fill->getPtrSnakeHead()->getTailLastPositionY(), faced);
-		fill->spawnFood();
-		delete this;
-	}
-}
 
 
