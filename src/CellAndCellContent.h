@@ -13,7 +13,7 @@ public:
 
 class Cell{
 public:
-	CellContent *cont;
+	CellContent *cont = nullptr;
 };
 
 #endif

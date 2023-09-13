@@ -18,27 +18,21 @@ Field::Field(){
 
 void Field::startFullField(){
 	for(int x = 0; x < 10; x++){
-		for(int y = 0; y < 10; y++){
-			cell[x][y]->cont = nullptr;
-			}
-		}
-	for(int x = 0; x < 10; x++){
 		SpawnController::getSpawnController().spawnWall(x, 0, this);
 		SpawnController::getSpawnController().spawnWall(x, 9, this);
-		}
+	}
 	for(int y = 1; y < 9; y++){
 		SpawnController::getSpawnController().spawnWall(0, y, this);
 		SpawnController::getSpawnController().spawnWall(9, y, this);
 	}
-//	cell[4][4]->cont = new SnakeHead(4, 4, this);
 	SpawnController::getSpawnController().spawnSnakeHead(4, 4, this);
 	SpawnController::getSpawnController().spawnRandomFood(this);
 }
 
 void Field::step(){
-	for(int x = 0; x < 10; x++){
-		for(int y = 0; y < 10; y++){
-			if(cell[x][y])
+	for(int y = 0; y < 10; y++){
+		for(int x = 0; x < 10; x++){
+			if(cell[x][y]->cont)
 				cell[x][y]->cont->move(this);
 		}
 	}
