@@ -2,7 +2,6 @@
 #define UTIL_H_
 
 int getRandNumInt();
-
-
+float getRandNumFloatSmall();
 
 #endif
