@@ -1,10 +1,13 @@
 #include <iostream>
 #include <typeinfo>
+
 #include "Field.h"
+
 #include "Util.h"
+#include "NeuralNetwork.h"
 
 using namespace std;
-Field::Field(){
+Field::Field(NeuralNetwork *ptrNeuralNetwork){
 	for(int x = 0; x < 10; x++){
 		for(int y = 0; y < 10; y++){
 			cell[x][y] = new Cell;
@@ -12,6 +15,7 @@ Field::Field(){
 	}
 	startFullField();
 	gameOver = false;
+	this->ptrNeuralNetwork = ptrNeuralNetwork;
 }
 
 void Field::startFullField(){
@@ -80,6 +84,10 @@ void Field::setGameOver(){
 	gameOver = true;
 }
 
+CellContent::eCellContentType Field::getTypeInCell(int x, int y){
+	return cell[x][y]->cont->getType();
+}
+
 void Field::cellRemove(int x, int y){
 	this->cell[x][y]->cont = nullptr;
 }
@@ -107,6 +115,9 @@ void Field::cellCheckCollision(int x, int y, Alive *Checker){
 CellContent::~CellContent() {}
 void CellContent::draw(){}
 void CellContent::collision(Alive *faced, Field *fill){}
+CellContent::eCellContentType CellContent::getType(){
+	return type;
+}
 
 void Wall::draw(){
 	cout << "#";
@@ -158,7 +169,8 @@ void SnakeHead::move(Field *fill){
 	tempX = x;
 	tempY = y;
 
-	dir = inputDir();
+	dir = fill->ptrNeuralNetwork->getOutput(fill);
+
 	switchDir(x, y, dir);
 	if(!isNeck(fill, neckX, neckY) && dir != STOP){
 		fill->cellMove(x, y, this);

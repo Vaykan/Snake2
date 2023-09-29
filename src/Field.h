@@ -5,12 +5,19 @@
 class Field;
 class SnakeHead;
 class Alive;
+class NeuralNetwork;
 
 class CellContent{
+protected:
+
 public:
+	enum eCellContentType{EMPTY, FOOD, SNAKEHEAD, SNAKEBODY, WALL};
 	virtual ~CellContent();
 	virtual void draw();
 	virtual void collision(Alive *faced, Field *fill);
+	eCellContentType getType();
+private:
+	eCellContentType type = CellContent::EMPTY;
 };
 
 class Cell{
@@ -20,7 +27,7 @@ public:
 
 class Field{
 public:
-	Field();
+	Field(NeuralNetwork *ptrNeuralNetwork);
 	void UIDraw();
 	void step();
 	bool gameIsPlaying();
@@ -33,6 +40,10 @@ public:
 	void spawnBody(int x, int y, Alive* SnakeHead);
 	SnakeHead* getPtrSnakeHead();
 	void setGameOver();
+	CellContent::eCellContentType getTypeInCell(int x, int y);
+	NeuralNetwork *ptrNeuralNetwork;
+
+
 private:
 	SnakeHead *ptrSnakeHead;
 	Cell *cell[10][10];
@@ -54,6 +65,7 @@ class SnakeBody : public Alive{
 private:
 	virtual void draw();
 	int x, y;
+	eCellContentType type = CellContent::SNAKEBODY;
 public:
 	virtual void collision(Alive *faced, Field *fill);
 	SnakeBody(SnakeHead *ptrSnakeHead);
@@ -65,6 +77,7 @@ public:
 
 class SnakeHead : public Alive{
 private:
+	eCellContentType type = CellContent::SNAKEHEAD;
 	SnakeBody *ptrNextBodyPart;
 	SnakeBody *ptrTail;
 	int x, y;
@@ -91,11 +104,13 @@ protected:
 
 class Food : public Not_alive{
 private:
+	eCellContentType type = CellContent::FOOD;
 	virtual void draw();
 	virtual void collision(Alive *faced, Field *fill);
 };
 
 class Wall : public Not_alive{
+	eCellContentType type = CellContent::WALL;
 	virtual void draw();
 	virtual void collision(Alive *faced, Field *fill);
 };

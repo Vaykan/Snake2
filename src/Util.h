@@ -3,5 +3,6 @@
 
 int getRandNumInt();
 float getRandNumFloatSmall();
+float getRandNumFloatFrom0to1();
 
 #endif
