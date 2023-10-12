@@ -24,7 +24,7 @@ public:
 	float getScore();
 	void randWeightStorageSmall();
 	Neuron *neuron[332];
-	float *weightStorage[10752];
+	float *weightStorage[20752];
 private:
 //	enum eCellContentType{EMPTY, FOOD, SNAKEHEAD, SNAKEBODY, WALL};
 	float typeConversionToFloat(CellContent::eCellContentType type);

@@ -30,7 +30,7 @@ NeuralNetwork::NeuralNetwork(){
 	for(int x = 0; x < 332; x++){
 		neuron[x] = new Neuron;
 	}
-	for(int x = 0; x < 10752; x++){
+	for(int x = 0; x < 20752; x++){
 		weightStorage[x] = new float;
 		*weightStorage[x] = getRandNumFloatFrom0to1();
 	}
@@ -76,6 +76,7 @@ void NeuralNetwork::hiddenLayer1(Field *fill, int &weightNum){
 	}
 }
 void NeuralNetwork::hiddenLayer2(Field *fill, int &weightNum){
+
 	for(int hiddenLayer2 = 164; hiddenLayer2 < 328; hiddenLayer2++){
 		for(int hiddenLayer1 = 100; hiddenLayer1 < 164; hiddenLayer1++){
 			neuron[hiddenLayer2]->setValue(neuron[hiddenLayer1]->getValue(), *weightStorage[weightNum]);
