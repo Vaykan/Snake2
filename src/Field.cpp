@@ -41,9 +41,7 @@ void Field::step(){
 	}
 
 bool Field::gameIsPlaying(){
-	if(gameOver == true)
-		return false;
-	return true;
+	return !gameOver;
 }
 
 void Field::UIDraw(){
@@ -62,7 +60,7 @@ void Field::UIDraw(){
 void Field::spawnFood(){
 	bool FoodSpawned = false;
 	int x, y;
-	while(FoodSpawned == false){
+	while(!FoodSpawned){
 		x = getRandNumInt();
 		y = getRandNumInt();
 		if(!cell[x][y]->cont){
@@ -85,7 +83,9 @@ void Field::setGameOver(){
 }
 
 CellContent::eCellContentType Field::getTypeInCell(int x, int y){
-	return cell[x][y]->cont->getType();
+    if(cell[x][y]->cont)
+        return cell[x][y]->cont->getType();
+    return CellContent::eCellContentType::EMPTY;
 }
 
 void Field::cellRemove(int x, int y){
@@ -110,13 +110,11 @@ void Field::cellCheckCollision(int x, int y, Alive *Checker){
 	this->cell[x][y]->cont->collision(Checker, this);
 }
 
-
-
 CellContent::~CellContent() {}
 void CellContent::draw(){}
 void CellContent::collision(Alive *faced, Field *fill){}
 CellContent::eCellContentType CellContent::getType(){
-	return type;
+	return eCellContentType::EMPTY;
 }
 
 void Wall::draw(){
@@ -127,6 +125,10 @@ void Wall::collision(Alive *faced, Field *fill){
 	if(typeid(*faced) == typeid(SnakeHead)){
 		fill->setGameOver();
 	}
+}
+
+CellContent::eCellContentType Wall::getType() {
+    return eCellContentType::WALL;
 }
 
 SnakeHead::SnakeHead(int x, int y, Field *fill){
@@ -222,6 +224,10 @@ bool SnakeHead::isNeck(Field *fill, int neckX, int neckY){
 		return false;
 }
 
+CellContent::eCellContentType SnakeHead::getType() {
+    return eCellContentType::SNAKEHEAD;
+}
+
 SnakeBody::SnakeBody(SnakeHead *ptrSnakeHead){
 	ptrNextBodyPart = nullptr;
 	x = ptrSnakeHead->getTailLastPositionX();
@@ -263,6 +269,10 @@ int SnakeBody::getY(){
 	return y;
 }
 
+CellContent::eCellContentType SnakeBody::getType() {
+    return eCellContentType::SNAKEBODY;
+}
+
 void Food::draw(){
 	cout << "+";
 }
@@ -272,6 +282,10 @@ void Food::collision(Alive *faced, Field *fill){
 		fill->spawnFood();
 		delete this;
 	}
+}
+
+CellContent::eCellContentType Food::getType() {
+    return eCellContentType::FOOD;
 }
 
 
